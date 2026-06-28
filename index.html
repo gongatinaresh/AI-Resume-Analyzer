@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Resume Analyzer — by Naresh</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+
+<link href="css/style.css" rel="stylesheet"/></head>
+<body>
+<nav>
+<div class="nav-logo">Resume<span>AI</span></div>
+<div class="nav-tag">AI Project · Naresh</div>
+</nav>
+<section class="hero">
+<div class="hero-content">
+<div class="hero-pill">⚡ Powered by AI</div>
+<h1>Get Your Resume <em>Analyzed</em><br/>&amp; Cover Letter Written</h1>
+<p>Paste your resume and job description. AI scores your match, finds missing keywords, gives improvement tips, and writes a personalized cover letter — in seconds.</p>
+<div class="hero-stats">
+<div class="hs"><div class="hs-n">4</div><div class="hs-l">AI Analyses</div></div>
+<div class="hs"><div class="hs-n">10s</div><div class="hs-l">Response Time</div></div>
+<div class="hs"><div class="hs-n">100%</div><div class="hs-l">Personalized</div></div>
+</div>
+</div>
+</section>
+<main class="main">
+<!-- INPUTS -->
+<div class="two-col">
+<div class="panel">
+<div class="panel-header">
+<div class="ph-left">
+<div class="ph-num">1</div>
+<div>
+<div class="ph-title">Your Resume</div>
+<div class="ph-sub">Paste your resume text</div>
+</div>
+</div>
+</div>
+<div class="panel-body">
+<textarea class="resume-input" id="resume" placeholder="Paste your resume here...
+
+Example:
+Naresh Kumar
+CS Graduate | Python Developer
+
+Skills: Python, Django, React, SQL, REST APIs
+
+Education: B.Tech Computer Science, Vel Tech University, 2024
+
+Projects:
+- Built a web scraper using Python and BeautifulSoup
+- Created a REST API with Django and PostgreSQL
+
+Internship: Web Developer Intern at ABC Tech (2023)"></textarea>
+</div>
+</div>
+<div class="panel">
+<div class="panel-header">
+<div class="ph-left">
+<div class="ph-num">2</div>
+<div>
+<div class="ph-title">Job Description</div>
+<div class="ph-sub">Paste the job you're applying for</div>
+</div>
+</div>
+</div>
+<div class="panel-body">
+<div class="field-gap">
+<textarea class="job-input" id="job" placeholder="Paste job description here...
+
+Example:
+We are looking for a Junior Python Developer with:
+- 1+ years experience with Python and Django
+- Knowledge of REST APIs and SQL databases
+- Experience with React or any frontend framework
+- Good communication skills
+- Problem-solving ability"></textarea>
+</div>
+<div class="field-gap">
+<label class="field-label">Cover letter tone</label>
+<div class="tone-row">
+<button class="tone-btn active" onclick="setTone(this,'professional')">Professional</button>
+<button class="tone-btn" onclick="setTone(this,'confident')">Confident</button>
+<button class="tone-btn" onclick="setTone(this,'friendly')">Friendly</button>
+<button class="tone-btn" onclick="setTone(this,'enthusiastic')">Enthusiastic</button>
+</div>
+</div>
+<div class="field-gap">
+<label class="field-label">Your name</label>
+<input id="username" placeholder="e.g. Naresh Kumar" type="text" value="Naresh"/>
+</div>
+</div>
+</div>
+</div>
+<div class="run-row">
+<button class="run-btn" id="run-btn" onclick="analyze()">
+<span class="btn-txt">⚡ Analyze Resume &amp; Generate Cover Letter</span>
+<div class="spinner"></div>
+</button>
+</div>
+<!-- RESULTS -->
+<div class="results" id="results">
+<!-- SCORES -->
+<div class="score-row">
+<div class="score-box">
+<div class="sb-val" id="score-match">—</div>
+<div class="sb-label">Job Match</div>
+<div class="sb-bar"><div class="sb-fill" id="bar-match"></div></div>
+</div>
+<div class="score-box">
+<div class="sb-val" id="score-strength">—</div>
+<div class="sb-label">Resume Strength</div>
+<div class="sb-bar"><div class="sb-fill" id="bar-strength"></div></div>
+</div>
+<div class="score-box">
+<div class="sb-val" id="score-keywords">—</div>
+<div class="sb-label">Keywords Found</div>
+<div class="sb-bar"><div class="sb-fill" id="bar-keywords"></div></div>
+</div>
+<div class="score-box">
+<div class="sb-val" id="score-chance">—</div>
+<div class="sb-label">Interview Chance</div>
+<div class="sb-bar"><div class="sb-fill" id="bar-chance"></div></div>
+</div>
+</div>
+<!-- ANALYSIS PANELS -->
+<div class="output-grid">
+<div class="out-panel">
+<div class="op-header">
+<div class="op-icon">✅</div>
+<div class="op-title">Strengths in your resume</div>
+</div>
+<div class="op-body">
+<div class="op-text" id="out-strengths"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+</div>
+<div class="out-panel">
+<div class="op-header">
+<div class="op-icon">⚠️</div>
+<div class="op-title">What's missing / needs improvement</div>
+</div>
+<div class="op-body">
+<div class="op-text" id="out-missing"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+</div>
+<div class="out-panel">
+<div class="op-header">
+<div class="op-icon">💡</div>
+<div class="op-title">Tips to improve your resume</div>
+</div>
+<div class="op-body">
+<div class="op-text" id="out-tips"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+</div>
+<div class="out-panel">
+<div class="op-header">
+<div class="op-icon">🎯</div>
+<div class="op-title">Interview preparation tips</div>
+</div>
+<div class="op-body">
+<div class="op-text" id="out-interview"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+</div>
+</div>
+<!-- KEYWORDS -->
+<div class="keywords-panel">
+<div class="kw-title">🔍 Keyword Analysis — Green = Found in resume · Orange = Missing from resume</div>
+<div class="kw-row" id="kw-row"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+<!-- COVER LETTER -->
+<div class="cover-panel">
+<div class="cp-header">
+<div class="cp-title">✉️ AI-Generated Cover Letter</div>
+<div class="cp-actions">
+<button class="cp-btn regen" onclick="regenCover()">↻ Regenerate</button>
+<button class="cp-btn copy" onclick="copyCover()">Copy Letter</button>
+</div>
+</div>
+<div class="cover-body">
+<div class="cover-text" id="cover-text"><div class="loading-pulse"><span></span><span></span><span></span></div></div>
+</div>
+</div>
+<!-- LINKEDIN POST PREVIEW -->
+<div class="li-card">
+<div class="li-header">
+<div class="li-avatar">N</div>
+<div>
+<div class="li-name" id="li-name">Naresh</div>
+<div class="li-role">CS Graduate · Python Full Stack Developer</div>
+</div>
+</div>
+<div class="li-post" id="li-post"><div class="loading-pulse"><span style="background:#555"></span><span style="background:#555"></span><span style="background:#555"></span></div></div>
+</div>
+</div>
+</main>
+<footer class="footer-bar">
+<div class="fb-left">Built by <span>Naresh</span> · CS Graduate · Python Full Stack Developer · Day 4 of 10-Day AI Learning Journey 🚀</div>
+<button class="share-btn" onclick="window.open('https://linkedin.com','_blank')">Share on LinkedIn</button>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script src="js/script.js"></script></body>
+</html>
